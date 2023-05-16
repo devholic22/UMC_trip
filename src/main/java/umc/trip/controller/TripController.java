@@ -11,6 +11,8 @@ import umc.trip.exception.InputValidateException;
 import umc.trip.exception.TargetNotFoundException;
 import umc.trip.service.TripService;
 
+import java.util.HashMap;
+
 @RestController
 @RequestMapping("/trip")
 public class TripController {
@@ -48,6 +50,20 @@ public class TripController {
         try {
             return ResponseEntity.ok(tripService.edit(id, editDto));
         } catch (TargetNotFoundException | InputValidateException e) {
+            return errorMessage(e.getMessage());
+        }
+    }
+
+    // 여행 정보 글 삭제
+    @DeleteMapping("/{id}")
+    ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            tripService.delete(id);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new HashMap<String, String>() {{
+                        put("message", "삭제 완료");
+                    }});
+        } catch (TargetNotFoundException e) {
             return errorMessage(e.getMessage());
         }
     }
