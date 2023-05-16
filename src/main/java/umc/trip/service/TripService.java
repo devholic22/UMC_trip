@@ -63,6 +63,14 @@ public class TripService {
         return targetTrip;
     }
 
+    // 여행 정보 삭제
+    public void delete(Long id) {
+        tripRepository.findById(id).orElseThrow(
+                () -> new TargetNotFoundException("target not found")
+        );
+        tripRepository.deleteById(id);
+    }
+
     private void validateTripDto(TripDto tripDto) {
         if (tripDto.getNation() == null ||
             tripDto.getTitle() == null ||
