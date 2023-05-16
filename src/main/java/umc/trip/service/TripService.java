@@ -1,11 +1,11 @@
 package umc.trip.service;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import umc.trip.dto.TripDto;
 import umc.trip.entity.Trip;
 import umc.trip.exception.InputValidateException;
+import umc.trip.exception.TargetNotFoundException;
 import umc.trip.repository.TripRepository;
 
 @Service
@@ -34,6 +34,17 @@ public class TripService {
         tripRepository.save(newTrip);
 
         return newTrip;
+    }
+
+    // 여행 정보 조회
+    public Trip read(Long id) {
+        Trip targetTrip = tripRepository.findById(id).orElseThrow(
+                () -> new TargetNotFoundException("target not found")
+        );
+
+        targetTrip.setView(targetTrip.getView() + 1);
+        
+        return targetTrip;
     }
 
     private void validateTripDto(TripDto tripDto) {
