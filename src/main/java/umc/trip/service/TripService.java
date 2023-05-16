@@ -3,6 +3,7 @@ package umc.trip.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import umc.trip.dto.TripDto;
+import umc.trip.dto.TripEditDto;
 import umc.trip.entity.Trip;
 import umc.trip.exception.InputValidateException;
 import umc.trip.exception.TargetNotFoundException;
@@ -43,7 +44,22 @@ public class TripService {
         );
 
         targetTrip.setView(targetTrip.getView() + 1);
-        
+
+        return targetTrip;
+    }
+
+    // 여행 정보 수정
+    public Trip edit(Long id, TripEditDto editDto) {
+        validateTripEditDto(editDto);
+
+        Trip targetTrip = tripRepository.findById(id).orElseThrow(
+                () -> new TargetNotFoundException("target not found")
+        );
+
+        targetTrip.setNation(editDto.getNation());
+        targetTrip.setTitle(editDto.getTitle());
+        targetTrip.setContent(editDto.getContent());
+
         return targetTrip;
     }
 
@@ -54,6 +70,13 @@ public class TripService {
             tripDto.getScore() == null ||
             tripDto.getScore() < 0 ||
             tripDto.getScore() > 10)
+            throw new InputValidateException("validation error");
+    }
+
+    private void validateTripEditDto(TripEditDto editDto) {
+        if (editDto.getNation() == null ||
+            editDto.getTitle() == null ||
+            editDto.getContent() == null)
             throw new InputValidateException("validation error");
     }
 }

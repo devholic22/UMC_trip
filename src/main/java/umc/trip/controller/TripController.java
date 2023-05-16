@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import umc.trip.dto.TripDto;
+import umc.trip.dto.TripEditDto;
 import umc.trip.exception.ExceptionResponse;
 import umc.trip.exception.InputValidateException;
 import umc.trip.exception.TargetNotFoundException;
@@ -37,6 +38,16 @@ public class TripController {
         try {
             return ResponseEntity.ok(tripService.read(id));
         } catch (TargetNotFoundException e) {
+            return errorMessage(e.getMessage());
+        }
+    }
+
+    // 여행 정보 글 수정
+    @PutMapping("/{id}")
+    ResponseEntity<?> edit(@PathVariable Long id, @RequestBody TripEditDto editDto) {
+        try {
+            return ResponseEntity.ok(tripService.edit(id, editDto));
+        } catch (TargetNotFoundException | InputValidateException e) {
             return errorMessage(e.getMessage());
         }
     }
