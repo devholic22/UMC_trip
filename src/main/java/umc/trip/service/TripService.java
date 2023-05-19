@@ -9,6 +9,8 @@ import umc.trip.exception.InputValidateException;
 import umc.trip.exception.TargetNotFoundException;
 import umc.trip.repository.TripRepository;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class TripService {
@@ -46,6 +48,11 @@ public class TripService {
         targetTrip.setView(targetTrip.getView() + 1);
 
         return targetTrip;
+    }
+
+    // 여행 정보 조회 - title이 포함된 글 목록 조회
+    public List<Trip> getTripsByTitle(String title) {
+        return tripRepository.findByTitleContaining(title);
     }
 
     // 여행 정보 수정

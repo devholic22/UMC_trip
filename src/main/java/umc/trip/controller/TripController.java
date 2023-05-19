@@ -44,6 +44,12 @@ public class TripController {
         }
     }
 
+    // 여행 정보 글 조회 - 여러 글 조회 (title)
+    @GetMapping
+    ResponseEntity<?> find(@RequestParam String title) {
+        return ResponseEntity.ok(tripService.getTripsByTitle(title));
+    }
+
     // 여행 정보 글 수정
     @PutMapping("/{id}")
     ResponseEntity<?> edit(@PathVariable Long id, @RequestBody TripEditDto editDto) {
